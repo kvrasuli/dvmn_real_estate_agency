@@ -8,11 +8,15 @@ def format_phone_numbers(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     for flat in Flat.objects.all():
         parsed_phone_number = phonenumbers.parse(flat.owners_phonenumber, 'RU')
-        flat.owner_pure_phone = phonenumbers.format_number(
-            parsed_phone_number,
-            phonenumbers.PhoneNumberFormat.E164
-        )
-        flat.save()
+        if phonenumbers.is_valid_number(parsed_phone_number):
+            flat.owner_pure_phone = phonenumbers.format_number(
+                parsed_phone_number,
+                phonenumbers.PhoneNumberFormat.E164
+            )
+            flat.save()
+        else:
+            flat.owner_pure_phone = 'Невалидный номер, исправьте!'
+            flat.save()
 
 
 class Migration(migrations.Migration):
