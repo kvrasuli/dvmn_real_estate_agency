@@ -16,8 +16,9 @@ class FlatAdmin(admin.ModelAdmin):
     raw_id_fields = ['liked_by']
 
     def get_phone_number(self, obj):
-        return '\n'.join([str(owner.owner_pure_phone) for owner in obj.owners.all()])
-
+        return '\n'.join(
+            [str(owner.owner_pure_phone) for owner in obj.owners.all()]
+        )
 
 
 @admin.register(Complaint)
